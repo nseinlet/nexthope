@@ -27,6 +27,7 @@
                              <field name="country_id"/>
                              <field name="instructor_id" domain="[('country_id', '=', country_id)]"/>
                              <field name="active"/>
+                             <field name="couleur"/>
                          </group>
                          <group string="Schedule">
                              <field name="start_date"/>
