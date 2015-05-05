@@ -33,6 +33,7 @@
                          <group string="Schedule">
                              <field name="start_date"/>
                              <field name="duration"/>
+                             <field name="end_date"/>
                              <field name="seats"/>
                              <field name="taken_seats" widget="progressbar"/>
                          </group>
@@ -40,6 +41,67 @@
                          <field name="attendee_ids"/>
                     </sheet>
                 </form>
+            </field>
+        </record>
+        
+        <!-- calendar view -->
+        <record model="ir.ui.view" id="session_calendar_view">
+            <field name="name">session.calendar</field>
+            <field name="model">openacademy.session</field>
+            <field name="arch" type="xml">
+                <calendar string="Session Calendar" date_start="start_date"
+                          date_stop="end_date"
+                          color="instructor_id">
+                    <field name="name"/>
+                </calendar>
+            </field>
+        </record>
+        
+        <!-- Search -->
+        <record model="ir.ui.view" id="session_search_view">
+            <field name="name">session.search</field>
+            <field name="model">openacademy.session</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="instructor_id"/>
+                    <field name="attendee_ids"/>
+                    <field name="course_id"/>
+                    
+                    <group string="Group By">
+                        <filter name="by_instructor" string="Instructor"
+                                context="{'group_by': 'instructor_id'}"/>
+                        <filter name="by_start_date" string="Start date"
+                                context="{'group_by': 'start_date'}"/>        
+                    </group>
+                    <filter name="last_year" string="Last year"
+                            domain="[('start_date', '&gt;=', (context_today() - datetime.timedelta(days=365)).strftime('%Y-%m-%d'))]"/>
+                </search>
+            </field>
+        </record>
+        
+        <!-- gantt -->
+        <record model="ir.ui.view" id="session_gantt_view">
+            <field name="name">session.gantt</field>
+            <field name="model">openacademy.session</field>
+            <field name="arch" type="xml">
+                <gantt string="Session Gantt" color="course_id"
+                       date_start="start_date" date_delay="hours" default_group_by='instructor_id'>
+                        <field name="name"/>
+                </gantt>
+            </field>
+        </record>
+        
+        <!-- graph -->
+        <record model="ir.ui.view" id="session_graph_view">
+            <field name="name">session.graph</field>
+            <field name="model">openacademy.session</field>
+            <field name="arch" type="xml">
+                <graph string="Total attendees per courses" type="pivot" stacked="True">
+				    <field name="instructor_id" type="row"/>
+				    <field name="start_date" type="col"/>
+				    <field name="duration" type="measure"/>
+				</graph>
             </field>
         </record>
         

@@ -2,6 +2,7 @@
 
 from openerp import models, fields, api
 from openerp.exceptions import Warning, ValidationError
+from datetime import timedelta
 
 class Course(models.Model):
     _name = 'openacademy.course'
@@ -77,7 +78,17 @@ class Session(models.Model):
     attendee_ids = fields.Many2many('res.partner', string="Attendees")
     taken_seats = fields.Float(string="Taken seats", compute='_taken_seats')
     couleur = fields.Char(default=_get_default_color)
+    end_date = fields.Date(string="End Date", store=True,
+        compute='_get_end_date', inverse='_set_end_date')
+    hours = fields.Float(string="Duration in hours",
+                         compute='_get_hours', inverse='_set_hours')
+    nbr_attendees = fields.Integer(compute='_get_nbr_attendees', store=True)
     
+    @api.one
+    @api.depends('attendee_ids')
+    def _get_nbr_attendees(self):
+        self.nbr_attendees = len(self.attendee_ids)
+        
     @api.one
     @api.depends('seats', 'attendee_ids')
     def _taken_seats(self):
@@ -108,4 +119,37 @@ class Session(models.Model):
     def _check_instructor_not_in_attendees(self):
         if self.instructor_id and self.instructor_id in self.attendee_ids:
             raise ValidationError("A session's instructor can't be an attendee")
+    
+    @api.one
+    @api.depends('start_date', 'duration')
+    def _get_end_date(self):
+        if not (self.start_date and self.duration):
+            self.end_date = self.start_date
+            return
+
+        # Add duration to start_date, but: Monday + 5 days = Saturday, so
+        # subtract one second to get on Friday instead
+        start = fields.Datetime.from_string(self.start_date)
+        duration = timedelta(days=self.duration, seconds=-1)
+        self.end_date = start + duration
         
+    @api.one
+    def _set_end_date(self):
+        if not (self.start_date and self.end_date):
+            return
+
+        # Compute the difference between dates, but: Friday - Monday = 4 days,
+        # so add one day to get 5 days instead
+        start_date = fields.Datetime.from_string(self.start_date)
+        end_date = fields.Datetime.from_string(self.end_date)
+        self.duration = (end_date - start_date).days + 1
+    
+    @api.one
+    @api.depends('duration')
+    def _get_hours(self):
+        self.hours = self.duration * 24
+
+    @api.one
+    def _set_hours(self):
+        self.duration = self.hours / 24
+                
