@@ -5,11 +5,12 @@
             <field name="name">session.tree</field>
             <field name="model">openacademy.session</field>
             <field name="arch" type="xml">
-                <tree string="Session Tree">
+                <tree string="Session Tree" colors="blue:duration&lt;5;red:duration&gt;15">
                     <field name="name"/>
                     <field name="course_id"/>
                     <field name="phone"/>
                     <field name="taken_seats" widget="progressbar"/>
+                    <field name="duration" invisible="1"/>
                 </tree>
             </field>
         </record>
@@ -37,33 +38,6 @@
                          </group>
                          <label for="attendee_ids"/>
                          <field name="attendee_ids"/>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-        
-        <record model="ir.ui.view" id="session_form_view_inherited">
-            <field name="name">session.form</field>
-            <field name="model">openacademy.session</field>
-            <field name="inherit_id" ref="session_form_view"/>
-            <field name="arch" type="xml">
-            	<xpath expr="//field[@name='country_id']" position="replace">
-            	
-            	</xpath>
-        	</field>
-        </record>
-        
-        <record model="ir.ui.view" id="session_form_view2">
-            <field name="name">session.form</field>
-            <field name="model">openacademy.session</field>
-            <field name="priority">10</field>
-            <field name="arch" type="xml">
-                <form string="Session Form">
-                    <sheet>
-                         <group string="General">
-                             <field name="course_id"/>
-                             <field name="name"/>
-                         </group>
                     </sheet>
                 </form>
             </field>

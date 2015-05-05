@@ -5,11 +5,13 @@ from openerp.exceptions import Warning, ValidationError
 
 class Course(models.Model):
     _name = 'openacademy.course'
-
+    _inherit = 'mail.thread'
+    _description = "Activite"
+    
     name = fields.Char(string="Title", required=True)
     description = fields.Text()
     responsible_id = fields.Many2one('res.users',
-        ondelete='set null', string="Responsible", index=True)
+        ondelete='set null', string="Responsible", index=True, track_visibility='onchange', copy=False)
     session_ids = fields.One2many('openacademy.session', 'course_id', string='Sessions')
     nbr_session = fields.Integer('Nombre de sessions', compute='_get_nbr_sessions')
     responsible_name = fields.Char(compute='_get_responsible_name')
@@ -30,7 +32,31 @@ class Course(models.Model):
     @api.depends('value')
     def _compute_name(self):
         self.name2 = "Record with value %s" % self.value
+    
+    @api.one
+    def copy(self, default=None):
+        default = dict(default or {})
+
+        copied_count = self.search_count(
+            [('name', '=like', u"Copy of {}%".format(self.name))])
+        if not copied_count:
+            new_name = u"Copy of {}".format(self.name)
+        else:
+            new_name = u"Copy of {} ({})".format(self.name, copied_count)
+
+        default['name'] = new_name
+        return super(Course, self).copy(default)
         
+    _sql_constraints = [
+        ('name_description_check',
+         'CHECK(name != description)',
+         "The title of the course should not be the description"),
+
+        ('name_unique',
+         'UNIQUE(name)',
+         "The course title must be unique"),
+    ]
+    
 class Session(models.Model):
     _name = 'openacademy.session'
     
