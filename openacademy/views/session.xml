@@ -9,6 +9,7 @@
                     <field name="name"/>
                     <field name="course_id"/>
                     <field name="phone"/>
+                    <field name="taken_seats" widget="progressbar"/>
                 </tree>
             </field>
         </record>
@@ -25,11 +26,13 @@
                              <field name="name"/>
                              <field name="country_id"/>
                              <field name="instructor_id" domain="[('country_id', '=', country_id)]"/>
+                             <field name="active"/>
                          </group>
                          <group string="Schedule">
                              <field name="start_date"/>
                              <field name="duration"/>
                              <field name="seats"/>
+                             <field name="taken_seats" widget="progressbar"/>
                          </group>
                          <label for="attendee_ids"/>
                          <field name="attendee_ids"/>
@@ -37,5 +40,33 @@
                 </form>
             </field>
         </record>
+        
+        <record model="ir.ui.view" id="session_form_view_inherited">
+            <field name="name">session.form</field>
+            <field name="model">openacademy.session</field>
+            <field name="inherit_id" ref="session_form_view"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='country_id']" position="replace">
+            	
+            	</xpath>
+        	</field>
+        </record>
+        
+        <record model="ir.ui.view" id="session_form_view2">
+            <field name="name">session.form</field>
+            <field name="model">openacademy.session</field>
+            <field name="priority">10</field>
+            <field name="arch" type="xml">
+                <form string="Session Form">
+                    <sheet>
+                         <group string="General">
+                             <field name="course_id"/>
+                             <field name="name"/>
+                         </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
    </data>
 </openerp>

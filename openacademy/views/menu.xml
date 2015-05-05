@@ -21,6 +21,7 @@
             <field name="res_model">openacademy.session</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="session_form_view"/>
         </record>
 
         
@@ -60,7 +61,8 @@
             <field name="view_mode">tree,form</field>
             <field name="domain">[('instructor', '=', True)]</field>
             <field name="context">{'default_instructor': True}</field>
-        </record>      
+        </record>
+        
         <menuitem id="instructors_menu" name="Instructors"
                   parent="configuration_menu"
                   action="instructor_list_action"/>
