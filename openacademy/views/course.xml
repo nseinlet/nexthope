@@ -82,11 +82,11 @@
                     <field name="message_follower_ids"/>
                     <templates>
                         <t t-name="kanban-box">
-                            <div class="oe_semantic_html_override oe_kanban_global_click oe_kanban_card oe_kanban_show_more">
+                            <div class="oe_semantic_html_override oe_kanban_global_click oe_kanban_card">
                                 <div class="oe_kanban_details">
                                     <h4 class="oe_partner_heading"><a type="open"><field name="name"/></a></h4>
                                 </div>
-
+						
                                 <div class="oe_kanban_footer_left">
                                     <div class="oe_right">
                                         <t t-foreach="record.message_follower_ids.raw_value" t-as="follower">

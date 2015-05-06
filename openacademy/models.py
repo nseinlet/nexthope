@@ -83,6 +83,17 @@ class Session(models.Model):
     hours = fields.Float(string="Duration in hours",
                          compute='_get_hours', inverse='_set_hours')
     nbr_attendees = fields.Integer(compute='_get_nbr_attendees', store=True)
+    color = fields.Integer()
+    state = fields.Selection([
+         ('draft', "Draft"),
+         ('confirmed', "Confirmed"),
+         ('done', "Done"),
+    ], default='draft')
+    
+    
+    @api.one
+    def send_signal(self):
+        self.signal_workflow('done')
     
     @api.one
     @api.depends('attendee_ids')
