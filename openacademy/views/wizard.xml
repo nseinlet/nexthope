@@ -18,6 +18,7 @@
 	            	<button type="object" name="go_select" string="Next" states="draft"/>
 	            	<button type="object" name="go_draft" string="Previous" states="select"/>
 	            	<button type="object" name="add_attendees" string="Valider" states="select" class="oe_highlight"/>
+	            	<button type="object" name="report" string="Report" states="select" class="oe_highlight"/>
 	            </footer>
             </field>
             
@@ -30,4 +31,30 @@
                     view_mode="form"
                     target="new"
                     key2="client_action_multi"/>
+                    
+        <report
+        id="report_wiz_session"
+        model="openacademy.wizard"
+        string="Session Attendees wizard"
+        name="openacademy.report_wizard_view"
+        file="openacademy.report_wizard"
+        report_type="qweb-pdf" />
+
+    <template id="report_wizard_view">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                        <h2 t-field="doc.session_id"/>
+                        <h3>Attendees:</h3>
+                        <ul>
+                            <t t-foreach="doc.attendee_ids" t-as="attendee">
+                                <li><span t-field="attendee.name"/></li>
+                            </t>
+                        </ul>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
 </data></openerp>

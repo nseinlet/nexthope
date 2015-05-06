@@ -44,4 +44,9 @@ class Wizard(models.TransientModel):
             'type': 'ir.actions.act_window',
             'target': 'new',
             'res_id': self[0].id,
-        }    
+        }
+        
+    @api.multi
+    def report(self):
+        res = self.env['report'].get_action(self, 'openacademy.report_wizard_view')
+        return res
