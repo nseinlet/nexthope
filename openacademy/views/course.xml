@@ -80,13 +80,17 @@
                 <kanban>
                     <field name="name"/>
                     <field name="message_follower_ids"/>
+                    <field name="nbr_session"/>
                     <templates>
                         <t t-name="kanban-box">
                             <div class="oe_semantic_html_override oe_kanban_global_click oe_kanban_card">
                                 <div class="oe_kanban_details">
                                     <h4 class="oe_partner_heading"><a type="open"><field name="name"/></a></h4>
                                 </div>
-						
+								<div class="oe_items_list">
+									<field name="nbr_session" widget="gauge" style="width:160px;height: 120px; cursor: pointer;" options="{'max':50}">Sessions</field>
+								</div>
+								
                                 <div class="oe_kanban_footer_left">
                                     <div class="oe_right">
                                         <t t-foreach="record.message_follower_ids.raw_value" t-as="follower">

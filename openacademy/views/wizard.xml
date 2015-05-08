@@ -6,7 +6,7 @@
                 <form string="Add Attendees">
                 	<field name="state" invisible="1"/>
                     <group states="draft">
-                        <field name="session_id"/>
+                        <field name="session_ids"/>
                     </group>
                     <group states="select">
                         <field name="attendee_ids"/>

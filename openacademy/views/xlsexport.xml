@@ -1,0 +1,32 @@
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="xlsexport_form_view">
+            <field name="name">xlsexport.form</field>
+            <field name="model">openacademy.xlsexport</field>
+            <field name="arch" type="xml">
+                <form string="Export excel">
+                	<field name="state" invisible="1"/>
+                    <group states="done">
+                        <field name="name" invisible="1"/>
+                        <field name="file" filename="name"/>
+                    </group>
+                    <footer>
+	                	<button special="cancel" string="Cancel"/>
+	                	or
+		            	<button type="object" name="do_export" string="Export" states="draft"/>	
+		            </footer>
+                </form>
+                
+            </field>            
+        </record>
+
+        <act_window id="launch_xlsexport_wizard"
+                    name="Export excel"
+                    src_model="openacademy.session"
+                    res_model="openacademy.xlsexport"
+                    view_mode="form"
+                    target="new"
+                    key2="client_action_multi"/>
+                    
+	</data>
+</openerp>

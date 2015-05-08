@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record model="ir.actions.act_window" id="xls_moves_menu_action">
+            <field name="name">Export moves</field>
+            <field name="res_model">nexthope_xls.xls_moves</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="nexthopeexports_menu" name="NextHope exports"
+                  parent="account.menu_finance"/>
+        <menuitem id="xls_moves_menu" name="Moves" parent="nexthopeexports_menu"
+                  action="xls_moves_menu_action"/>
+                          
+    </data>
+</openerp>

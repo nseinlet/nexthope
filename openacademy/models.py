@@ -90,6 +90,10 @@ class Session(models.Model):
          ('done', "Done"),
     ], default='draft')
     
+    @api.one
+    def add_seat(self):
+        self.seats = self.seats + 1
+        return self.seats
     
     @api.one
     def send_signal(self):
